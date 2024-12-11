@@ -5,8 +5,8 @@ import random
 
 class Game_421:
     def __init__(self):
-        self.dices = []
-        self.win_dices = []
+        self.dice = []
+        self.win_dice = []
         self.number_dice_faces = - 1
 
         # number of tries
@@ -18,35 +18,47 @@ class Game_421:
         self.played_party = 0
         self.score = 0
 
+        self.init_game()
+
+    # Init variables from specific configuration
     def init_game(self):
-        config_path = os.path.join(os.getcwd(), "src/configuration/config.json")
+        config_path = os.path.join(os.getcwd(), "configuration/config.json")
         with open(config_path, 'r') as file:
             data = json.load(file)
 
-        win_dices = data["win_dices"]
-        dices = [int(char) for char in win_dices]
-        self.win_dices = self.sort_dices(dices)
-        for i in range(0, len(self.win_dices)):
-            self.dices.append(0)
+        win_dice = data["win_dice"]
+        dice = [int(char) for char in win_dice]
+        self.win_dice = self.sort_dice(dice)
+        for i in range(0, len(self.win_dice)):
+            self.dice.append(0)
         self.number_dice_faces = data["number_dice_faces"]
 
         self.horizon = data["number_tries"]
 
         self.init_actions()
 
-    def reset_game(self):
-        for i in range(len(self.dices)):
-            self.dices[i] = 0
+    def get_win_dice(self):
+        return self.win_dice
 
-        config_path = os.path.join(os.getcwd(), "src/configuration/config.json")
+    def get_actions(self):
+        return self.actions
+
+    def get_horizon(self):
+        return self.horizon
+
+    def reset_game(self):
+        for i in range(len(self.dice)):
+            self.dice[i] = 0
+
+        config_path = os.path.join(os.getcwd(), "configuration/config.json")
         with open(config_path, 'r') as file:
             data = json.load(file)
         self.horizon = data["number_tries"]
 
-
+    # Init all possible
     def init_actions(self):
         actions = ["keep", "roll"]
-        self.actions = self.generate_combinations(actions, len(self.dices))
+        self.actions = self.generate_combinations(actions, len(self.dice))
         # print(self.actions)
 
     def generate_combinations(self, actions, num_dice, current_combination=None):
@@ -62,38 +74,37 @@ class Game_421:
 
         return all_combinations
 
-    def play_dices(self, action):
-        actions = action.split(" ")
-        for i in range(len(actions)):
-            if actions[i] == "roll" or actions[i] == "r":
-                self.dices[i] = random.randint(1, self.number_dice_faces)
-        self.dices = self.sort_dices(self.dices)
+    def play_dice(self, action):
+        action_per_die = action.split(" ")
+        for i in range(len(action_per_die)):
+            if action_per_die[i] == "roll" or action_per_die[i] == "r":
+                self.dice[i] = random.randint(1, self.number_dice_faces)
+        self.dice = self.sort_dice(self.dice)
         self.horizon -= 1
         self.display_state_game()
 
     def get_state(self):
         result = ""
-        for dice in self.dices:
+        for dice in self.dice:
             result += str(dice) + " "
         result += f"h{self.horizon}"
         return result
 
-    def sort_dices(self, dices):
-        dices_sorted = sorted(dices, reverse=True)
-        return dices_sorted
+    def sort_dice(self, dice):
+        dice_sorted = sorted(dice, reverse=True)
+        return dice_sorted
 
 
     def start_game(self, player, number_party):
-        self.init_game()
 
         for i in range(0, number_party):
-            print(f"Game {i} ____________________")
-            action = "roll roll roll"
-            self.play_dices(action)
+            print(f"Game {i+1} ____________________")
+            action = " ".join(["roll"] * len(self.dice))
+            self.play_dice(action)
             while not self.end():
                 player.perceive(self)
                 action = player.decide()
-                self.play_dices(action)
+                self.play_dice(action)
                 result = self.score_state()
                 player.sleep(result)
             self.reset_game()
@@ -103,26 +114,26 @@ class Game_421:
 
     def score_state(self):
         # Win score
-        if self.win():
+        if self.dice == self.win_dice:
             self.score += 100
             return 100
 
-        # Same dices
-        if len(set(self.dices)) == 1:
-            if self.dices[0] == 1:
+        # Same dice
+        if len(set(self.dice)) == 1:
+            if self.dice[0] == 1:
                 self.score += 90
                 return 90
             self.score += 80
             return 80
 
         # n-1 1 result
-        if self.dices.count(1) == len(self.dices) - 1:
+        if self.dice.count(1) == len(self.dice) - 1:
             self.score += 60
             return 60
 
         # Suite
         sorted_faces = list(range(1, self.number_dice_faces + 1))  # Exemple : [1, 2, 3, 4, 5, 6]
-        if self.dices in [sorted_faces[i:i + len(self.dices)] for i in range(len(sorted_faces) - len(self.dices) + 1)]:
+        if self.dice in [sorted_faces[i:i + len(self.dice)] for i in range(len(sorted_faces) - len(self.dice) + 1)]:
             self.score += 70
             return 70
 
@@ -132,10 +143,9 @@ class Game_421:
 
 
     def win(self):
-        if self.dices == self.win_dices:
+        if self.dice == self.win_dice:
             print("Game Win !!!")
             self.win_game += 1
-            self.played_party +=1
             return True
         return False
 
@@ -143,28 +153,23 @@ class Game_421:
         if self.horizon == 0:
             print("Game Loose :(")
             self.loose_game += 1
-            self.played_party +=1
             return True
         return False
 
     def end(self):
         if self.win() or self.loose():
+            self.played_party +=1
             return True
         return False
 
 
-    def display_dices(self, dices):
+    def display_dice(self, dice):
         result = ""
-        for dice in dices:
+        for dice in dice:
             result += str(dice)
             result += " "
         #[:-1] to avoid the last character which is a space
         return result[:-1]
 
     def display_state_game(self):
-        print(f"{self.display_dices(self.dices)} h{self.horizon}")
-
-
-    def display_game(self):
-        print(f"Score to win the game: {self.display_dices(self.win_dices)}")
-        print(f"Your dices: {self.display_dices(self.dices)}, try: {self.horizon}")
+        print(f"{self.display_dice(self.dice)} h{self.horizon}")
