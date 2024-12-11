@@ -38,24 +38,24 @@ However, it is possible to optimize the score.
 The scoring system is as follows:
 - Winning combination → 100 points
 - All the dice show the same value:
-  - If the value is 1 → 90 points
-  - Otherwise → 80 points
-- All the dice show 1, except for one → 60 points 
-- A sequence of consecutive numbers → 70 points
+  - If the value is 1 → 30 points
+  - Otherwise → 25 points
+- All the dice show 1, except for one → 10 points 
+- A sequence of consecutive numbers → 20 points
 - Any other combination → 1 point
 
 Using a Random Bot to play 10,000 games, the following results were obtained:
 ```
 690 games won 
 9310 games lost
-score: 18.1736/100
+score: 4.598266/100
 ```
 
 Using a Policy Bot to play 10,000 games, the following results were obtained:
 ```
 1466 games won 
 8534 games lost
-score: 52.359/100
+score: 9.096966/100
 ```
 
 ## Requirement
