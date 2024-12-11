@@ -1,10 +1,10 @@
 from game.game_421 import Game_421
-from player.human import Humane
+from player.human import Human
 
 if __name__ == '__main__':
     game = Game_421()
 
-    humane = Humane()
+    human = Human()
     print("-----------------------------------------------------------------------------")
     print("|                        ©  Dice Roll Game                                  |")
     print("| Author : Alexis EGEA                                                      |")
@@ -16,4 +16,4 @@ if __name__ == '__main__':
         f"to reroll it. Enter your actions in the desired order to perform keeps and re rolls."
         f"\n    Note that the dice are sorted before being displayed.\n")
 
-    game.start_game(humane, 1)
+    game.start_game(human, 1)
