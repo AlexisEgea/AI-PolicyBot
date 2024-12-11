@@ -1,5 +1,5 @@
 from game.game_421 import Game_421
-from player.humane import Humane
+from player.human import Humane
 
 if __name__ == '__main__':
     game = Game_421()

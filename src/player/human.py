@@ -1,4 +1,4 @@
-class Humane:
+class Human:
     def perceive(self, game):
         pass
 
