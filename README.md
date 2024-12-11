@@ -31,6 +31,33 @@ This project allows you to represent three types of players:
 - `game`: Game class.
 - `player`: Contains the implementations of the three types of players: Policy, Random, and Human.
 
+## Results
+
+Because it is a game of chance, it is not possible to predict the outcome of a game with precision. 
+However, it is possible to optimize the score.
+The scoring system is as follows:
+- Winning combination → 100 points
+- All the dice show the same value:
+  - If the value is 1 → 90 points
+  - Otherwise → 80 points
+- All the dice show 1, except for one → 60 points 
+- A sequence of consecutive numbers → 70 points
+- Any other combination → 1 point
+
+Using a Random Bot to play 10,000 games, the following results were obtained:
+```
+690 games won 
+9310 games lost
+score: 18.1736/100
+```
+
+Using a Policy Bot to play 10,000 games, the following results were obtained:
+```
+1466 games won 
+8534 games lost
+score: 52.359/100
+```
+
 ## Requirement
 
 - Having Python3 and Pip installed on your machine.
