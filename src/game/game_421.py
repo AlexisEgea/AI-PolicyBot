@@ -109,8 +109,8 @@ class Game_421:
                 player.sleep(result)
             self.reset_game()
         print(f"On {self.played_party} games, {self.win_game} were won and {self.loose_game} were lost")
-        result = self.score / number_party
-        print(f"score: {result}")
+        result_games = self.score / number_party
+        print(f"score: {result_games}")
 
     def score_state(self):
         # Win dice
