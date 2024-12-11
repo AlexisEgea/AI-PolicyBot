@@ -27,8 +27,8 @@ This project allows you to represent three types of players:
 #### Directory Structure:
 
 - `src`: Contains the source code of the project.
-- `data`: Includes the game configuration files.
-- `game`: Houses the main game class.
+- `data`: Includes the game configuration file.
+- `game`: Game class.
 - `player`: Contains the implementations of the three types of players: Policy, Random, and Human.
 
 ## Requirement
