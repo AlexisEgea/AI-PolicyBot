@@ -101,6 +101,7 @@ class Game_421:
             print(f"Game {i+1} ____________________")
             action = " ".join(["roll"] * len(self.dice))
             self.play_dice(action)
+            self.score_state()
             while not self.end():
                 player.perceive(self)
                 action = player.decide()
@@ -109,7 +110,7 @@ class Game_421:
                 player.sleep(result)
             self.reset_game()
         print(f"On {self.played_party} games, {self.win_game} were won and {self.loose_game} were lost")
-        result_games = self.score / number_party
+        result_games = self.score / (number_party * len(self.dice))
         print(f"score: {result_games}")
 
     def score_state(self):
@@ -121,21 +122,21 @@ class Game_421:
         # All the dice show the same value.
         if len(set(self.dice)) == 1:
             if self.dice[0] == 1:
-                self.score += 90
-                return 90
-            self.score += 80
-            return 80
+                self.score += 30
+                return 30
+            self.score += 25
+            return 25
 
         # All the dice are showing 1, except for one
         if self.dice.count(1) == len(self.dice) - 1:
-            self.score += 60
-            return 60
+            self.score += 10
+            return 10
 
         # A sequence of consecutive numbers
         sorted_faces = list(range(1, self.number_dice_faces + 1))
         if self.dice in [sorted_faces[i:i + len(self.dice)] for i in range(len(sorted_faces) - len(self.dice) + 1)]:
-            self.score += 70
-            return 70
+            self.score += 20
+            return 20
 
         # Other
         self.score += 1
