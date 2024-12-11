@@ -52,7 +52,7 @@ To execute a `.sh` Script:
 Commands to run to make the project work:
 1. Cloning the project to your machine
 ```sh
-git clone https://github.com/AlexisEgea/AI-Generate-Image.git
+git clone https://github.com/AlexisEgea/AI-Policy.git
 ```
 2. Installing the prerequisites
 ```sh
@@ -82,11 +82,11 @@ launcher.sh
 ```
 ---
 
-Note that the current version of the project has been tested on both Linux and Windows (Git Bash). If you encounter difficulties running the project, feel free to use an IDE (PyCharm, VS Code, or another), create a `venv` environment and execute the `main.py` file.
+Note that the current version of the project has been tested on both Linux and Windows (Git Bash). If you encounter difficulties running the project, feel free to use an IDE (PyCharm, VS Code, or another), create a `venv` environment and execute the one of the `launcher_bot.py` file depending on the player you want to use.
 
 ## Contact Information
 
- For inquiries or feedback, please contact me at [alexisegea@outlook.com](mailto:alexisegea@outlook.com).
+For inquiries or feedback, please contact me at [alexisegea@outlook.com](mailto:alexisegea@outlook.com).
 
 ## Copyright
 
