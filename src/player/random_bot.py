@@ -13,14 +13,15 @@ class RandomBot:
 
     def decide(self):
         self.state = self.game.get_state()
-        i = random.randint(0, len(self.game.actions)-1)
-        action = self.game.actions[i]
+        actions = self.game.get_actions()
+        i = random.randint(0, len(actions)-1)
+        action = actions[i]
         self.action = action
 
         return self.action
 
+    # Save the party in the dataset
     def sleep(self, result):
-        # open a State.Action.Value file in append mode:
-        logFile= open( "src/data/421.csv", "a" )
+        logFile= open( "data/421.csv", "a" )
         logFile.write( f"{self.state},{self.action},{result}\n" )
         logFile.close()
