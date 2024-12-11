@@ -29,7 +29,7 @@ while true; do
         1)
             echo "You chose to play a game of 421 (human)."
             echo
-            $PYTHON_CMD -m launcher_humane
+            $PYTHON_CMD -m launcher_human
             break
             ;;
         2)
