@@ -55,7 +55,7 @@ class Game_421:
             data = json.load(file)
         self.horizon = data["number_tries"]
 
-    # Init all possible
+    # Init all possible actions
     def init_actions(self):
         actions = ["keep", "roll"]
         self.actions = self.generate_combinations(actions, len(self.dice))
