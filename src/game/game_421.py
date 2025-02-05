@@ -17,6 +17,7 @@ class Game_421:
         self.loose_game = 0
         self.played_party = 0
         self.score = 0
+        self.sum_score = 0
 
         self.init_game()
 
@@ -54,6 +55,7 @@ class Game_421:
         with open(config_path, 'r') as file:
             data = json.load(file)
         self.horizon = data["number_tries"]
+        self.score = 0
 
     # Init all possible actions
     def init_actions(self):
@@ -96,52 +98,50 @@ class Game_421:
 
 
     def start_game(self, player, number_party):
-
         for i in range(0, number_party):
             print(f"Game {i+1} ____________________")
             action = " ".join(["roll"] * len(self.dice))
             self.play_dice(action)
-            self.score_state()
+            self.score = self.score_state()
+            self.sum_score += self.score
             while not self.end():
                 player.perceive(self)
                 action = player.decide()
                 self.play_dice(action)
-                result = self.score_state()
-                player.sleep(result)
+                self.score = self.score_state()
+                self.sum_score += self.score
+                player.sleep(self.score)
             self.reset_game()
         print(f"On {self.played_party} games, {self.win_game} were won and {self.loose_game} were lost")
-        result_games = self.score / number_party
-        print(f"score: {result_games}")
+        result = self.sum_score / self.played_party
+        print(f"score: {result}/100")
 
+    # Retrieve the score/reward, which is the difference between the previous and the new score/reward.
     def score_state(self):
+        previous_score = self.score
+
         # Win dice
         if self.dice == self.win_dice:
-            self.score += 100
-            return 100
-
+            score = 100
         # All the dice show the same value.
-        if len(set(self.dice)) == 1:
+        elif len(set(self.dice)) == 1:
             if self.dice[0] == 1:
-                self.score += 30
-                return 30
-            self.score += 25
-            return 25
-
+                score = 30
+            else:
+                score = 25
         # All the dice are showing 1, except for one
-        if self.dice.count(1) == len(self.dice) - 1:
-            self.score += 10
-            return 10
-
+        elif self.dice.count(1) == len(self.dice) - 1:
+            score = 10
         # A sequence of consecutive numbers
-        sorted_faces = list(range(1, self.number_dice_faces + 1))
-        if self.dice in [sorted_faces[i:i + len(self.dice)] for i in range(len(sorted_faces) - len(self.dice) + 1)]:
-            self.score += 20
-            return 20
+        elif self.dice in [list(range(i, i + len(self.dice))) for i in
+                           range(1, self.number_dice_faces - len(self.dice) + 2)]:
+            score = 20
+        # Other cases
+        else:
+            score = 1
 
-        # Other
-        self.score += 1
-        return 1
-
+        reward = score - previous_score
+        return reward
 
     def win(self):
         if self.dice == self.win_dice:
