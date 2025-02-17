@@ -2,7 +2,6 @@ import json
 import os
 import random
 
-
 class Game_421:
     def __init__(self):
         self.dice = []
@@ -38,6 +37,9 @@ class Game_421:
 
         self.init_actions()
 
+    def get_dice(self):
+        return self.dice
+
     def get_win_dice(self):
         return self.win_dice
 
@@ -46,6 +48,28 @@ class Game_421:
 
     def get_horizon(self):
         return self.horizon
+
+    def get_number_dice_faces(self):
+        return self.number_dice_faces
+
+    def get_score(self):
+        return self.score
+
+    def add_score(self, score):
+        self.score = score
+        self.sum_score += score
+
+    def get_sum_score(self):
+        return self.sum_score
+
+    def get_win_game(self):
+        return self.win_game
+
+    def get_loose_game(self):
+        return self.loose_game
+
+    def get_played_party(self):
+        return self.played_party
 
     def reset_game(self):
         for i in range(len(self.dice)):
@@ -95,53 +119,6 @@ class Game_421:
     def sort_dice(self, dice):
         dice_sorted = sorted(dice, reverse=True)
         return dice_sorted
-
-
-    def start_game(self, player, number_party):
-        for i in range(0, number_party):
-            print(f"Game {i+1} ____________________")
-            action = " ".join(["roll"] * len(self.dice))
-            self.play_dice(action)
-            self.score = self.score_state()
-            self.sum_score += self.score
-            while not self.end():
-                player.perceive(self)
-                action = player.decide()
-                self.play_dice(action)
-                self.score = self.score_state()
-                self.sum_score += self.score
-                player.sleep(self.score)
-            self.reset_game()
-        print(f"On {self.played_party} games, {self.win_game} were won and {self.loose_game} were lost")
-        result = self.sum_score / self.played_party
-        print(f"score: {result}/100")
-
-    # Retrieve the score/reward, which is the difference between the previous and the new score/reward.
-    def score_state(self):
-        previous_score = self.score
-
-        # Win dice
-        if self.dice == self.win_dice:
-            score = 100
-        # All the dice show the same value.
-        elif len(set(self.dice)) == 1:
-            if self.dice[0] == 1:
-                score = 30
-            else:
-                score = 25
-        # All the dice are showing 1, except for one
-        elif self.dice.count(1) == len(self.dice) - 1:
-            score = 10
-        # A sequence of consecutive numbers
-        elif self.dice in [list(range(i, i + len(self.dice))) for i in
-                           range(1, self.number_dice_faces - len(self.dice) + 2)]:
-            score = 20
-        # Other cases
-        else:
-            score = 1
-
-        reward = score - previous_score
-        return reward
 
     def win(self):
         if self.dice == self.win_dice:
