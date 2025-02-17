@@ -2,7 +2,6 @@ class Evaluation:
     @classmethod
     # def score(cls, dice, win_dice, number_dice_faces, previous_score):
     def score(cls, game):
-
         # Win dice
         if game.win():
             score = 100
