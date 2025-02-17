@@ -1,4 +1,5 @@
 from game.game_421 import Game_421
+from game.launcher import Launcher
 from player.human import Human
 
 if __name__ == '__main__':
@@ -16,4 +17,5 @@ if __name__ == '__main__':
         f"to reroll it. Enter your actions in the desired order to perform keeps and re rolls."
         f"\n    Note that the dice are sorted before being displayed.\n")
 
-    game.start_game(human, 1)
+    launcher = Launcher(game, human)
+    launcher.start_game(1)
